@@ -142,7 +142,124 @@ if nginx container is running inside the ec2 isntance, how to access the conatin
 
 **Customized docker images:**
 
+***for every docker instruction, separate Dockerfile has been created for testing purpose.***
+
 To build a custom Docker image, Docker provides the option to create a Dockerfile.
  
-Dockerfile: is used to build custom images. By using docker instructions to create custom images like FROM RUN CMD ENTRYPOINT COPY ADD ENV ARG WORKDIR USER
+Dockerfile: this file is a declarative way of creating custom docker images. we can use docker instastruction to build the docker image.
 
+FROM
+-------
+ 
+ FROM should be the first instruction in dockerfile. it represents base OS. there is an exception for ARG
+```
+ FROM <base-os> 
+```
+the base-os should be bare minimum OS unlike the the OS used in VMs (RHEL,Ubuntu)
+So, almalinux almost similar to RHEL except that there is no support from the theam
+
+how you build docker image?
+```
+docker build -t <image-name>:version .  
+```
+-t refers tag,  (.) refers current folder have Dockerfile file.
+
+RUN
+------
+
+RUN instruction is used to configure image like installing packages, configure etc.` RUN instruction runs at the time of image building`.
+
+CMD
+-----
+
+CMD instruction `runs at the time of container creation`. it keeps container running.
+
+systemctl start nginx --> /etc/systemd/system/nginx.service
+
+systemctl works only for full server. Starts the NGINX service as a background daemon managed by systemd.
+
+ngnix -g daemon-off --> daemon-off instructs NGINX to run in the foreground instead of detaching to the background.
+```
+docker build --> image creation --> RUN
+docker run --> container creation --> CMD
+
+docker run -d cmd:v1 --> detach mode
+docker run -d -p 80:80 cmd:v1
+
+docker push cekharch/cmd:v1
+
+docker build -t cmd:v1 .
+docker run cmd:v1
+docker run -d  cmd:v1
+docker rm -f 613d5bd01d5f5377b
+docker run -d -p 80:80 cmd:v1
+docker ps
+docker images
+docker tag cmd:v1 cekharch/nginx:v1
+docker images
+docker push cekharch/nginx
+docker push cekharch/nginx:v1
+docker pull cekharch/nginx
+docker pull cekharch/nginx:v1
+```
+
+LABEL
+----
+
+it adds metadata to the image,  description , who is the owner, which projects, LABELS are used to filter the images.
+
+EXPOSE INSTRUCTION DOESNT ACTUALLY PUBLISH THE PORT
+------
+used to let the users know what are the ports this container will open when it runs . EXPOSE instruction will not effect functionality.
+it gives only information.
+
+ENV
+---
+sets the environment varibles, these can be used inside container
+
+COPY
+-------
+used to copy files from local to container
+
+ADD
+---
+ADD also does same as COPY but it has 2 extra capabilities
+1. it can get files from internet
+2. it can extract the files into image.
+
+ENTRYPOINT:
+---
+docker run -d from:v1 -->
+
+1. CMD can be overridden at runtime.
+2. you can't override ENTRYPOINT like CMD. if you try to do, it will go and append to the entrypoint command-name
+3. for better result and best practices,CMD can provide the arguments to entrypoint. 
+so you can mention default args through CMD and you can override them at run time.
+
+USER:
+---
+for security reasons, conatiners should not run with root previledges, it must be on normal user. atleast last instruction should be USER.
+
+WORKDIR:
+---
+workdir is used to set current working direcotry in docker image
+
+ARG
+---
+ARG is used to set the variables at build time only, not inside the container
+
+ARG vs ENV:
+---
+
+1 ENV variables can be access in` image build time and container run time both`.
+2 ARG variables can only access at `the time of image creation`.
+3 we can use ARG as` first instruction in Dockerfile before FORM in one spacecial case i.e to supply version to the base image`
+4.ARG instruction `before FROM is only valid until FROM`. it cant be accessed after FROM
+docker build -t args:v1 --build-arg course=docker .  --> we can override ARG variables using --build-arg 
+ 
+how can we use ARG variable inside the container as well?
+by setting value to ENV variable.
+
+ONBUILD:
+----------
+ONBUILD is used to trigger few instructions at build time when user is using our built image.
