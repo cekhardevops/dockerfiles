@@ -252,8 +252,11 @@ ARG vs ENV:
 ---
 
 1 ENV variables can be access in` image build time and container run time both`.
+
 2 ARG variables can only access at `the time of image creation`.
+
 3 we can use ARG as` first instruction in Dockerfile before FORM in one spacecial case i.e to supply version to the base image`
+
 4.ARG instruction `before FROM is only valid until FROM`. it cant be accessed after FROM
 docker build -t args:v1 --build-arg course=docker .  --> we can override ARG variables using --build-arg 
  
