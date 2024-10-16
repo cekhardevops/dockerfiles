@@ -179,29 +179,6 @@ systemctl start nginx --> /etc/systemd/system/nginx.service
 systemctl works only for full server. Starts the NGINX service as a background daemon managed by systemd.
 
 ngnix -g daemon-off --> daemon-off instructs NGINX to run in the foreground instead of detaching to the background.
-```
-docker build --> image creation --> RUN
-docker run --> container creation --> CMD
-
-docker run -d cmd:v1 --> detach mode
-docker run -d -p 80:80 cmd:v1
-
-docker push cekharch/cmd:v1
-
-docker build -t cmd:v1 .
-docker run cmd:v1
-docker run -d  cmd:v1
-docker rm -f 613d5bd01d5f5377b
-docker run -d -p 80:80 cmd:v1
-docker ps
-docker images
-docker tag cmd:v1 cekharch/nginx:v1
-docker images
-docker push cekharch/nginx
-docker push cekharch/nginx:v1
-docker pull cekharch/nginx
-docker pull cekharch/nginx:v1
-```
 
 LABEL
 ----
