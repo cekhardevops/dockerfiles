@@ -187,8 +187,9 @@ it adds metadata to the image,  description , who is the owner, which projects, 
 
 EXPOSE INSTRUCTION DOESNT ACTUALLY PUBLISH THE PORT
 ------
-used to let the users know what are the ports this container will open when it runs . EXPOSE instruction will not effect functionality.
-it gives only information.
+used to let the users know what are the ports this container will open when it runs .
+
+EXPOSE instruction will not effect functionality.it gives only information.
 
 ENV
 ---
@@ -201,15 +202,19 @@ used to copy files from local to container
 ADD
 ---
 ADD also does same as COPY but it has 2 extra capabilities
+
 1. it can get files from internet
+
 2. it can extract the files into image.
 
 ENTRYPOINT:
 ---
-docker run -d from:v1 -->
+The ENTRYPOINT instruction in a Dockerfile specifies the main command that a container will execute when it starts.
 
 1. CMD can be overridden at runtime.
+
 2. you can't override ENTRYPOINT like CMD. if you try to do, it will go and append to the entrypoint command-name
+
 3. for better result and best practices,CMD can provide the arguments to entrypoint. 
 so you can mention default args through CMD and you can override them at run time.
 
