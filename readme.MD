@@ -69,3 +69,80 @@ In the context of microservices architecture, Docker and containerization are pa
 
 **physical servers vs VMs vs Containers**
 * PENDING...
+
+
+# docker installation on RHEL
+
+**Set up the repository**
+
+```
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+```
+
+**To install latest version**
+```
+sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+**start docker**
+
+```
+sudo systemctl start docker
+```
+**add user to docker group to run docker command without root previledges**
+```
+usermod -aG <user-name> docker
+```
+
+**docker commands:**
+
+***listed below commands are useful to pull the image from the repo and create container and run the container.***
+
+```
+docker ps (lists all running containers on that node)
+
+docker ps -a (lists all the containers includes running and stopped)
+
+docker images ( gives list images downloaded from the repository) 
+
+docker pull nginx:version ( if it is vendor image) 
+
+docker create nginx:version 
+
+docker start container-id 
+
+docker stop container-id 
+
+docker rm container-id 
+
+docker rm -f container-id( to stop forcefully and remove the container)
+
+docker rmi image-id( to remove the image locally downloaded) 
+
+docker run nginx ( it will pull the image from the repository if it not already exit in local repo and create the container and run the container) 
+
+docker run -d nignx ( it runs the container in detaching mode) 
+
+docker run -p 9090:80 nginx 
+
+docker run -p 9091:80 nginx 
+
+docker exec -it conatiner-id bash ( to login to container and opens the bash terminal) 
+
+docker inspect <conatiner-id> ( gives information about container) 
+
+docker logs <conatiner-id> ( gives the container logs) 
+
+docker run -p 8080:80 --name docker-practice -d <conatiner-id> 
+```
+
+if nginx container is running inside the ec2 isntance, how to access the conatiner from outside the instance?
+* container is like a nano server running inside the ec2 isntance. it also has (0-65535 ports) container opens 80 port on container. when user hits the request, it will reach to host port. we need to map host port with container port. using -p we can acheive this port forwarding docker run -p 80:80 nginx now, request will go through hostport to conatiner port and serve the request
+
+**Customized docker images:**
+
+To build a custom Docker image, Docker provides the option to create a Dockerfile.
+ 
+Dockerfile: is used to build custom images. By using docker instructions to create custom images like FROM RUN CMD ENTRYPOINT COPY ADD ENV ARG WORKDIR USER
+
